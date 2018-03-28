@@ -15,14 +15,18 @@ class ExampleComponent extends Component {
     this._response = this.asyncLoadData(this.props.id);
   }
 
-  asyncLoadData = async id => {
-    return await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+  asyncLoadData = id => {
+    const task = fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+    console.log(`starting to fetch... id=${id}`);
+
+    return task;
   };
 
   async componentDidMount() {
     const externalData = await (await this._response).json();
     if (!this._hasUnmounted) {
-      console.log(`Setting externalData = ${externalData}`);
+      console.log(`Setting externalData = ${externalData.id}`);
+
       this.setState({ externalData });
     }
   }
@@ -38,7 +42,9 @@ class ExampleComponent extends Component {
     const { id, userId, title, body } = this.state.externalData;
     return (
       <Fragment>
-        <p>id: {id} for userId: {userId}</p>
+        <p>
+          id: {id} for userId: {userId}
+        </p>
         <h2>{title}</h2>
         <p>{body}</p>
         <hr />
